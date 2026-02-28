@@ -1,0 +1,42 @@
+[
+  {
+    "id": "case_001",
+    "text": "足場板ズレてヒヤッとした。高所だったので危なかった。",
+    "category_4m": "Man,Method",
+    "risk_level": "HIGH",
+    "location": "足場",
+    "height_m": 7
+  },
+  {
+    "id": "case_002",
+    "text": "クレーンで吊っていた荷物が急に揺れて、近くの作業員にぶつかりそうになった。",
+    "category_4m": "Machine",
+    "risk_level": "CRITICAL",
+    "location": "重機周辺",
+    "height_m": 0
+  },
+  {
+    "id": "case_003",
+    "text": "脚立から降りるときに、靴が滑ってヒヤリとした。",
+    "category_4m": "Man,Method",
+    "risk_level": "MEDIUM",
+    "location": "平地",
+    "height_m": 1
+  },
+  {
+    "id": "case_004",
+    "text": "作業中に釘が飛んできて、顔のすぐ横を通過した。本当に怖かった。",
+    "category_4m": "Material",
+    "risk_level": "HIGH",
+    "location": "作業スペース",
+    "height_m": 0
+  },
+  {
+    "id": "case_005",
+    "text": "床の電動工具のコードに足を引っ掛けて、転びそうになった。",
+    "category_4m": "Man",
+    "risk_level": "LOW",
+    "location": "通路",
+    "height_m": 0
+  }
+]
