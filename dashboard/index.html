@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,43 +14,65 @@
             padding: 20px;
             color: #333;
         }
+
         .container {
             max-width: 1000px;
             margin: 0 auto;
         }
+
         h1 {
             border-bottom: 2px solid #ccc;
             padding-bottom: 10px;
             margin-bottom: 20px;
             color: #2c3e50;
         }
+
         #reports-container {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
+
         .card {
             background: #fff;
             border-radius: 8px;
             padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: relative;
         }
-        .risk-CRITICAL { border-left: 6px solid #9b59b6; background: #f5eef8; }
-        .risk-HIGH     { border-left: 6px solid #e74c3c; background: #fdf0ef; }
-        .risk-MEDIUM   { border-left: 6px solid #f39c12; background: #fef9ef; }
-        .risk-LOW      { border-left: 6px solid #27ae60; background: #edfaf3; }
-        
+
+        .risk-CRITICAL {
+            border-left: 6px solid #9b59b6;
+            background: #f5eef8;
+        }
+
+        .risk-HIGH {
+            border-left: 6px solid #e74c3c;
+            background: #fdf0ef;
+        }
+
+        .risk-MEDIUM {
+            border-left: 6px solid #f39c12;
+            background: #fef9ef;
+        }
+
+        .risk-LOW {
+            border-left: 6px solid #27ae60;
+            background: #edfaf3;
+        }
+
         .header-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
         }
+
         .badges {
             display: flex;
             gap: 10px;
         }
+
         .badge {
             padding: 4px 10px;
             border-radius: 20px;
@@ -57,18 +80,34 @@
             font-weight: bold;
             color: #fff;
         }
-        .badge-4m { background: #34495e; }
-        .badge-CRITICAL { background: #9b59b6; }
-        .badge-HIGH     { background: #e74c3c; }
-        .badge-MEDIUM   { background: #f39c12; }
-        .badge-LOW      { background: #27ae60; }
-        
+
+        .badge-4m {
+            background: #34495e;
+        }
+
+        .badge-CRITICAL {
+            background: #9b59b6;
+        }
+
+        .badge-HIGH {
+            background: #e74c3c;
+        }
+
+        .badge-MEDIUM {
+            background: #f39c12;
+        }
+
+        .badge-LOW {
+            background: #27ae60;
+        }
+
         .text {
             font-size: 16px;
             line-height: 1.5;
             margin-bottom: 10px;
             font-weight: 500;
         }
+
         .follow-up {
             font-size: 14px;
             color: #555;
@@ -77,12 +116,14 @@
             border-radius: 4px;
             margin-bottom: 10px;
         }
+
         .footer-row {
             font-size: 12px;
             color: #777;
             display: flex;
             justify-content: space-between;
         }
+
         .empty-message {
             text-align: center;
             padding: 40px;
@@ -92,6 +133,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>ゲンバログ — ヒヤリハット ダッシュボード</h1>
@@ -102,37 +144,37 @@
 
     <script>
         // Supabase の URL と anon key を設定してください
-        const SUPABASE_URL = '';
-        const SUPABASE_ANON_KEY = '';
+        const SUPABASE_URL = 'https://bwinzthncgcaahzdxawb.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_y2z2GRPvXHill8b1YG1jVw_XjQvd4hy';
 
         if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-            document.getElementById('reports-container').innerHTML = 
+            document.getElementById('reports-container').innerHTML =
                 '<div class="empty-message">Supabase の情報が設定されていません。index.html の SUPABASE_URL と SUPABASE_ANON_KEY を設定してください。</div>';
         } else {
-            const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            
+            const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
             async function fetchReports() {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('reports')
                     .select('*')
                     .order('created_at', { ascending: false });
-                
+
                 if (error) {
                     console.error('Error fetching reports:', error);
                     return;
                 }
-                
+
                 renderReports(data);
             }
 
             function renderReports(reports) {
                 const container = document.getElementById('reports-container');
-                
+
                 if (!reports || reports.length === 0) {
                     container.innerHTML = '<div class="empty-message">報告はまだありません。</div>';
                     return;
                 }
-                
+
                 container.innerHTML = '';
                 reports.forEach(report => {
                     const card = createCardElement(report);
@@ -143,9 +185,9 @@
             function createCardElement(report) {
                 const card = document.createElement('div');
                 card.className = `card risk-${report.risk_level}`;
-                
+
                 const date = new Date(report.created_at).toLocaleString('ja-JP');
-                
+
                 let html = `
                     <div class="header-row">
                         <div class="badges">
@@ -156,11 +198,11 @@
                     </div>
                     <div class="text">${escapeHtml(report.text)}</div>
                 `;
-                
+
                 if (report.follow_up_answer) {
                     html += `<div class="follow-up"><strong>追加回答:</strong> ${escapeHtml(report.follow_up_answer)}</div>`;
                 }
-                
+
                 html += `<div class="footer-row">`;
                 if (report.similar_case_id) {
                     html += `<span>類似事例ID: ${escapeHtml(report.similar_case_id)}</span>`;
@@ -168,7 +210,7 @@
                     html += `<span></span>`;
                 }
                 html += `</div>`;
-                
+
                 card.innerHTML = html;
                 return card;
             }
@@ -176,18 +218,19 @@
             function escapeHtml(unsafe) {
                 if (!unsafe) return '';
                 return unsafe
-                     .replace(/&/g, "&amp;")
-                     .replace(/</g, "&lt;")
-                     .replace(/>/g, "&gt;")
-                     .replace(/"/g, "&quot;")
-                     .replace(/'/g, "&#039;");
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
             }
 
             // 初期データ取得
             fetchReports();
 
             // Realtime購読
-            supabase
+            console.log('Supabase connected');
+            supabaseClient
                 .channel('public:reports')
                 .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'reports' }, payload => {
                     console.log('New report received!', payload);
@@ -196,7 +239,7 @@
                     if (emptyMsg) {
                         emptyMsg.remove();
                     }
-                    
+
                     const newCard = createCardElement(payload.new);
                     container.insertBefore(newCard, container.firstChild);
                 })
@@ -204,4 +247,5 @@
         }
     </script>
 </body>
+
 </html>
